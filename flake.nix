@@ -1,5 +1,5 @@
 {
-  # Inputs-only flake: the soaked pins for the jpe-nix estate's deployed hosts.
+  # Inputs-only flake: the pins for the jpe-nix estate's deployed hosts.
   #
   # Consume through `follows` from a top-level flake only. Library flakes keep
   # their own standalone defaults and never take this flake as an input; the
@@ -9,9 +9,8 @@
   #   inputs.nixpkgs.follows = "pins/nixpkgs";
   #   inputs.<lib>.inputs.nixpkgs.follows = "pins/nixpkgs";
   #
-  # flake.lock is the single place these revisions are chosen. Every locked
-  # revision has been released for at least 7 days (see README.md).
-  description = "Soaked nixpkgs, home-manager and nix-darwin pins for jpe-nix hosts";
+  # flake.lock is the single place these revisions are chosen.
+  description = "Nixpkgs, home-manager and nix-darwin pins for jpe-nix hosts";
 
   inputs = {
     # Release branch = the intended major pin. Bumping a release is an edit to

@@ -23,14 +23,6 @@ jobs:
         run: nix flake check --all-systems --no-build
       - name: Check lock file is complete
         run: nix flake lock --no-update-lock-file
-      - name: Check every locked input is soaked (7 days)
-        run: |
-          jq -e --argjson min "$((7 * 86400))" '
-            [.nodes | to_entries[] | select(.value.locked.lastModified)
-              | select(now - .value.locked.lastModified < $min) | .key] as $young
-            | if ($young | length) == 0 then true
-              else error("younger than 7 days: \($young | join(", "))") end
-          ' flake.lock
       - name: Check one node per pin (no duplicate nixpkgs)
         run: |
           test "$(jq '[.nodes[] | select(.original.repo == "nixpkgs")] | length' flake.lock)" -eq 2

@@ -1,5 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>JacobPEvans/.github:renovate-nix"],
-  "lockFileMaintenance": { "enabled": false }
+  "extends": ["github>JacobPEvans/.github:renovate-nix"]
 }
