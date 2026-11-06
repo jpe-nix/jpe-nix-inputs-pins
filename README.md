@@ -46,13 +46,10 @@ After `nix flake update pins`, the consumer's lock carries these exact revisions
   its own children through `follows`, so one override reaches every leaf.
 - **`flake.lock` is the one place revisions are chosen.** A release bump, such as 26.05 to 26.11, edits the four
   URLs in `flake.nix`.
-- **Soak.** Every locked revision has been out for at least 7 days. The hard floor is 3 days. For nixpkgs, the
-  release moment is the channel advance: the `git-revision` timestamp on releases.nixos.org. For other inputs, it
-  is the commit date on the tracked branch.
 
 ## Contributing
 
-Open a pull request. CI checks the flake, the lock and the soak age.
+Open a pull request. CI checks the flake and the lock.
 
 ## License
 
