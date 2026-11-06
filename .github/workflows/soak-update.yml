@@ -1,0 +1,19 @@
+name: Soak update
+
+# Weekly: move every pin to the newest revision released at least 7 days ago.
+on:
+  schedule:
+    - cron: "37 10 * * 1" # Mondays 10:37 UTC
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  soak-update:
+    uses: JacobPEvans/.github/.github/workflows/_flake-soak-update.yml@v1
+    permissions:
+      contents: read
+    with:
+      min_age_days: 7
+    secrets:
+      GH_ACTION_RELEASE_PLEASE_PRIVATE_KEY: ${{ secrets.GH_ACTION_RELEASE_PLEASE_PRIVATE_KEY }}
