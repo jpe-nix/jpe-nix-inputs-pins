@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  flake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31
+        with:
+          extra_nix_config: |
+            extra-experimental-features = nix-command flakes
+      - name: Check flake
+        run: nix flake check --all-systems --no-build
+      - name: Check lock file is complete
+        run: nix flake lock --no-update-lock-file
+      - name: Check every locked input is soaked (7 days)
+        run: |
+          jq -e --argjson min "$((7 * 86400))" '
+            [.nodes | to_entries[] | select(.value.locked.lastModified)
+              | select(now - .value.locked.lastModified < $min) | .key] as $young
+            | if ($young | length) == 0 then true
+              else error("younger than 7 days: \($young | join(", "))") end
+          ' flake.lock
+      - name: Check one node per pin (no duplicate nixpkgs)
+        run: |
+          test "$(jq '[.nodes[] | select(.original.repo == "nixpkgs")] | length' flake.lock)" -eq 2
